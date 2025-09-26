@@ -5,7 +5,10 @@ import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
   plugins: [tailwindcss(), reactRouter(), tsconfigPaths()],
+  optimizeDeps: {
+    include: ["@syncfusion/ej2-base"], // let Vite convert CJS → ESM
+  },
   ssr: {
-    noExternal: ["/@syncfusion/"]
-  }
+    noExternal: ["@syncfusion/ej2-base"], // keep only the package name, no leading slash
+  },
 });

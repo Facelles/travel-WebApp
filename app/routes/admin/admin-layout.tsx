@@ -1,16 +1,33 @@
 import { Outlet } from "react-router";
+import { MobileSideBar, NavItems } from "../../../components/index";
+import { useEffect, useState } from "react";
 
 const AdminLayout = () => {
-    return (
-        <div className="admin-layout">
-            <div className="block lg:hidden">MobileSideBar</div>
+  const [SidebarComponent, setSidebarComponent] = useState<any>(null);
 
-            <aside className="w-full max-w-[270px] hidden lg:block">Side Bar</aside>
-            <aside className="children">
-                <Outlet />
-            </aside>
-        </div>
-    );
+  useEffect(() => {
+    import("@syncfusion/ej2-react-navigations").then((pkg) => {
+      setSidebarComponent(() => pkg.SidebarComponent);
+    });
+  }, []);
+
+  if (!SidebarComponent) return null; // запобігаємо рендеру undefined
+
+  return (
+    <div className="admin-layout">
+      <MobileSideBar />
+
+      <aside className="w-full max-w-[270px] hidden lg:block">
+        <SidebarComponent width={270} enableGestures={false}>
+          <NavItems />
+        </SidebarComponent>
+      </aside>
+
+      <aside className="children">
+        <Outlet />
+      </aside>
+    </div>
+  );
 };
 
 export default AdminLayout;

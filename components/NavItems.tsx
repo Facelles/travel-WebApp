@@ -9,7 +9,7 @@ const NavItems = ({ handleClick }: { handleClick: () => void }) => {
     const user = {
         name: 'Andrian',
         email: 'contact@gmail.com',
-        imageUrl: '../public/assets/images/david.webp',
+        imageUrl: '/assets/images/david.webp',
     }
 
 
@@ -17,7 +17,7 @@ const NavItems = ({ handleClick }: { handleClick: () => void }) => {
         <section className="nav-items">
             <Link to="/" className="link-logo">
                 <img
-                    src="./assets/icons/logo.svg"
+                    src="/assets/icons/logo.svg"
                     alt="logo"
                     className="size-[30px]"
                 />
@@ -37,7 +37,7 @@ const NavItems = ({ handleClick }: { handleClick: () => void }) => {
                                     <img
                                         src={icon}
                                         alt={label}
-                                        className={`group-hover:brightness-0 size-0 group-hover:invert ${isActive ? "brightness-0 invert" : "text-dark-200"} `}
+                                        className={`group-hover:brightness-0 size-5 group-hover:invert ${isActive ? "brightness-0 invert" : "text-dark-200"} `}
                                     />
                                     {label}
                                 </div>
@@ -47,7 +47,7 @@ const NavItems = ({ handleClick }: { handleClick: () => void }) => {
                 </nav>
 
                 <footer className="nav-footer">
-                    <img src={user?.imageUrl || '../public/assets/images/david.webp'} alt={user?.name || 'David'} />
+                    <img src={user?.imageUrl || '/assets/images/david.webp'} alt={user?.name || 'David'} />
                     <article>
                         <h2>
                             {user?.name}
@@ -61,7 +61,7 @@ const NavItems = ({ handleClick }: { handleClick: () => void }) => {
                         }}
                         className="cursor-pointer"
                     />
-                    <img src="../public/assets/icons/logout.svg" alt="logout" className="size-6" />
+                    <img src="/assets/icons/logout.svg" alt="logout" className="size-6" />
 
                 </footer>
 

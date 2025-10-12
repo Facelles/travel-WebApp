@@ -27,7 +27,7 @@ const MobileSideBar = () => {
       <header className="flex items-center justify-between p-2 bg-white shadow-md">
         <Link to="/" className="flex items-center gap-2">
           <img src="/assets/icons/logo.svg" alt="logo" className="w-8 h-8" />
-          <h1 className="text-lg font-bold">TourVistoMobile</h1>
+          <h1 className="text-lg font-bold">TourVisto</h1>
         </Link>
 
         <button onClick={toggleSidebar}>

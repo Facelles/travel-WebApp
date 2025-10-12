@@ -11,7 +11,7 @@ const AdminLayout = () => {
     });
   }, []);
 
-  if (!SidebarComponent) return null; // запобігаємо рендеру undefined
+  if (!SidebarComponent) return null;
 
   return (
     <div className="admin-layout">

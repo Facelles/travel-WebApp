@@ -5,7 +5,7 @@ import { registerLicense } from "@syncfusion/ej2-base";
 
 registerLicense(import.meta.env.VITE_SYNCFUSION_LICENSE_KEY);
 
-const NavItems = ({ handleClick }: { handleClick: () => void }) => {
+const NavItems = ({ handleClick }: { handleClick?: () => void }) => {
     const user = {
         name: 'Andrian',
         email: 'contact@gmail.com',

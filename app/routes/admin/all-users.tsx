@@ -1,10 +1,17 @@
-import React from 'react'
+import { Header } from "../../../components";
 
 const Allusers = () => {
   return (
-    <div>
-        Users Table
-    </div>
+    <main className='dashboard wrapper'>
+      <Header
+        title="Trips Page"
+        descprition="Trakck users"
+      />
+
+      All users Page Contents
+
+
+    </main>
   )
 }
 

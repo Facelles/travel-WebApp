@@ -1,16 +1,24 @@
+import { useLocation } from "react-router";
+import { cn } from "~/lib/utils"; 
+
 type Props = {
   title: string;
   descprition?: string;
 }
 
 const Header = ({ title, descprition }: Props) => {
+  const location = useLocation();
+
   return (
     <header className="header">
       <article>
-        <h1>
+        <h1 className={cn("text-dark-100", location.pathname === '/' ? 'text-2xl md:text-4xl font-bold':
+          'textl-xl md:text-2xl font-semibold'
+        )}>
           {title}
         </h1>
-        <p>
+        <p className={cn("text-gray-100 font-normal", location.pathname === '/' ? 'text-base md:text-lg':
+          'textl-sm md:text-lg')}>
           {descprition}
         </p>
       </article>

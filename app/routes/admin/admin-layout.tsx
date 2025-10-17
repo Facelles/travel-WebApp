@@ -2,6 +2,35 @@ import { Outlet } from "react-router";
 import { MobileSideBar, NavItems } from "../../../components/index";
 import { useEffect, useState } from "react";
 
+/**
+ * The `AdminLayout` component serves as the layout for the admin section of the application.
+ * It dynamically imports the `SidebarComponent` from the `@syncfusion/ej2-react-navigations` package
+ * and renders it alongside other layout elements.
+ *
+ * @component
+ *
+ * @remarks
+ * - The `SidebarComponent` is loaded dynamically using `import()` to optimize the initial load time.
+ * - The component uses `useState` to manage the dynamically imported `SidebarComponent`.
+ * - The `useEffect` hook ensures the `SidebarComponent` is only imported once when the component mounts.
+ *
+ * @returns {JSX.Element | null} The rendered admin layout or `null` if the `SidebarComponent` is not yet loaded.
+ *
+ * @example
+ * ```tsx
+ * <AdminLayout />
+ * ```
+ *
+ * @dependencies
+ * - `@syncfusion/ej2-react-navigations` for the `SidebarComponent`.
+ * - `MobileSideBar` and `NavItems` components for additional layout functionality.
+ * - `Outlet` from `react-router-dom` for rendering nested routes.
+ *
+ * @css
+ * - `.admin-layout` for the main layout styling.
+ * - `.children` for the content area styling.
+ * - `.w-full`, `.max-w-[270px]`, `.hidden`, `.lg:block` for responsive design.
+ */
 const AdminLayout = () => {
   const [SidebarComponent, setSidebarComponent] = useState<any>(null);
 

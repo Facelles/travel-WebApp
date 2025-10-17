@@ -6,6 +6,15 @@ type Props = {
   descprition?: string;
 }
 
+/**
+ * Header component that displays a title and description based on the current location path.
+ *
+ * @param {Object} Props - The props object.
+ * @param {string} Props.title - The title to be displayed in the header.
+ * @param {string} Props.descprition - The description to be displayed in the header.
+ *
+ * @returns {JSX.Element} The rendered Header component.
+ */
 const Header = ({ title, descprition }: Props) => {
   const location = useLocation();
 

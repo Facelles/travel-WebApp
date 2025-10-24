@@ -6,6 +6,16 @@ declare interface BaseUser {
   imageUrl: string;
 }
 
+declare interface AppUserProfile {
+  $id: string;
+  name: string;
+  email: string;
+  imageUrl?: string | null;
+  joinedAt: string;
+  accountId: string;
+
+}
+
 declare interface UserData extends BaseUser {
   itineraryCreated: number | string;
   status: "user" | "admin";

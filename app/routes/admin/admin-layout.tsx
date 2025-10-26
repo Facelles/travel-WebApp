@@ -1,6 +1,8 @@
-import { Outlet } from "react-router";
+import { Outlet, redirect } from "react-router";
 import { MobileSideBar, NavItems } from "../../../components/index";
 import { useEffect, useState } from "react";
+import { account } from "~/appwrite/client";
+import { getExistingUser, storeUserData } from "~/appwrite/auth";
 
 /**
  * The `AdminLayout` component serves as the layout for the admin section of the application.
@@ -31,6 +33,23 @@ import { useEffect, useState } from "react";
  * - `.children` for the content area styling.
  * - `.w-full`, `.max-w-[270px]`, `.hidden`, `.lg:block` for responsive design.
  */
+export async function clientLoader() {
+    try {
+        const user = await account.get();
+
+        if(!user.$id) return redirect("/sign-in");
+
+        const existingUser = await getExistingUser(user.$id);
+
+        if (existingUser?.status === 'user') {
+            return redirect("/");
+        }
+        return existingUser?.$id ? existingUser : await storeUserData();
+    } catch(e) {
+        console.log("Error in clientLoader: ", e);
+        return redirect("/sign-in");
+    }
+}
 const AdminLayout = () => {
   const [SidebarComponent, setSidebarComponent] = useState<any>(null);
 

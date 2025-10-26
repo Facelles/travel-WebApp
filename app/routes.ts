@@ -5,6 +5,7 @@ const routes: RouteConfig = [
     route("dashboard", "./routes/admin/dashboard.tsx"),
     route("all-users", "./routes/admin/all-users.tsx"),
   ]),
+  route("sign-in", "./routes/root/sign-in.tsx"),
   route("/", "./routes/main.tsx", {
   }),
 ];

@@ -1,17 +1,19 @@
-import { Link, NavLink } from "react-router";
+import { Link, NavLink, useLoaderData, useNavigate } from "react-router";
 import { sidebarItems } from "~/constants";
 import { cn } from "~/lib/utils";
 import { registerLicense } from "@syncfusion/ej2-base";
+import { logoutUser } from "~/appwrite/auth";
 
 registerLicense(import.meta.env.VITE_SYNCFUSION_LICENSE_KEY);
 
 const NavItems = ({ handleClick }: { handleClick?: () => void }) => {
-    const user = {
-        name: 'Andrian',
-        email: 'contact@gmail.com',
-        imageUrl: '/assets/images/david.webp',
-    }
+    const user = useLoaderData();
+    const navigate = useNavigate();
 
+    const handleLogout = async () => {
+        await logoutUser();
+        navigate('/sign-in');
+    }
 
     return (
         <section className="nav-items">
@@ -50,19 +52,18 @@ const NavItems = ({ handleClick }: { handleClick?: () => void }) => {
                     <img src={user?.imageUrl || '/assets/images/david.webp'} alt={user?.name || 'David'} />
                     <article>
                         <h2>
-                            {user?.name}
+                            {user?.name || 'Guest'}
                         </h2>
-                        <p>{user.email}</p>
+                        <p>{user?.email || ''}</p>
                     </article>
 
                     <button
-                        onClick={() => {
-                            console.log('Logout clicked');
-                        }}
+                        onClick={handleLogout}
                         className="cursor-pointer"
-                    />
-                    <img src="/assets/icons/logout.svg" alt="logout" className="size-6" />
-
+                        aria-label="Logout"
+                    >
+                        <img src="/assets/icons/logout.svg" alt="logout" className="size-6" />
+                    </button>
                 </footer>
 
             </div>

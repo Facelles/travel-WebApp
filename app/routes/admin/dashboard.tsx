@@ -1,14 +1,9 @@
 import { Header, StatsCard, TripCard } from "../../../components";
-import { dashboardStats, user, allTrips } from "~/constants";
-import { redirect } from "react-router";
+import { dashboardStats, allTrips } from "~/constants";
 import { getUser } from "~/appwrite/auth";
 import type { Route } from './+types/dashboard';
 
 const { totalUsers, usersJoined, totalTrips, tripsCreated, userRole } = dashboardStats;
-
-export async function loader() {
-  throw new Error("some error thrown in a loader");
-};
 
 export const clientLoader = async () => await getUser();
 

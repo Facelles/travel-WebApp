@@ -64,13 +64,6 @@ const Allusers = ({loaderData}: Route.ComponentProps) => {
             template={({joinedAt}: {joinedAt: string}) => formatDate(joinedAt)}
           />
 
-          {/* <ColumnDirective
-            field="itineraryCreated"
-            headerText="ItineraryCreated Created"
-            width="130"
-            textAlign="Left"
-          /> */}
-
             <ColumnDirective
             field="status"
             headerText="Type"

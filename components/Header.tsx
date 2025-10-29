@@ -1,9 +1,12 @@
-import { useLocation } from "react-router";
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router";
 import { cn } from "~/lib/utils"; 
 
 type Props = {
   title: string;
   descprition?: string;
+  ctaText?: string;
+  ctaUrl?: string;
 }
 
 /**
@@ -15,8 +18,17 @@ type Props = {
  *
  * @returns {JSX.Element} The rendered Header component.
  */
-const Header = ({ title, descprition }: Props) => {
+const Header = ({ title, descprition, ctaText, ctaUrl }: Props) => {
+  const [ButtonComponent, setButtonComponent] = useState<any>(null)
   const location = useLocation();
+
+  useEffect(() => {
+    import("@syncfusion/ej2-react-buttons").then((pkg) => (
+      setButtonComponent(() => pkg.ButtonComponent)
+    ))
+  });
+
+  if(!ButtonComponent) return null;
 
   return (
     <header className="header">
@@ -31,6 +43,14 @@ const Header = ({ title, descprition }: Props) => {
           {descprition}
         </p>
       </article>
+        {ctaText && ctaUrl && (
+          <Link to={ctaUrl}>
+            <ButtonComponent type="button" className="button-class !h-11 !w-full md:w-[240px]">
+              <img src="/assets/icons/plus.svg" alt="plus"  className="size-5"/>
+              <span className="p-16-semibold text-white">{ctaText}</span>
+            </ButtonComponent>
+          </Link>
+        )}
     </header>
   )
 }

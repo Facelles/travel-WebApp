@@ -25,8 +25,9 @@ declare type User = BaseUser;
 
 declare interface Country {
   name: string;
-  latlng: [number, number];
-  value?: string;
+  coordinates: [number, number];
+  flagUrl: string;
+  value: string;
   openStreetMap?: string;
 }
 

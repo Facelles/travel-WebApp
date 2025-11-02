@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router";
-import { cn } from "~/lib/utils"; 
+import { cn } from "~/lib/utils";
+import { useSyncfusionComponent } from "~/hooks/useSyncfusionComponent";
 
 type Props = {
   title: string;
@@ -19,16 +19,14 @@ type Props = {
  * @returns {JSX.Element} The rendered Header component.
  */
 const Header = ({ title, descprition, ctaText, ctaUrl }: Props) => {
-  const [ButtonComponent, setButtonComponent] = useState<any>(null)
   const location = useLocation();
+  const components = useSyncfusionComponent(
+    () => import("@syncfusion/ej2-react-buttons"),
+    ["ButtonComponent"]
+  );
 
-  useEffect(() => {
-    import("@syncfusion/ej2-react-buttons").then((pkg) => (
-      setButtonComponent(() => pkg.ButtonComponent)
-    ))
-  });
-
-  if(!ButtonComponent) return null;
+  if (!components) return null;
+  const { ButtonComponent } = components;
 
   return (
     <header className="header">

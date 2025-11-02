@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
 import { Header } from "../../../components";
 import { cn, formatDate } from "~/lib/utils";
 import { getAllUsers } from "~/appwrite/auth";
+import { useSyncfusionComponent } from "~/hooks/useSyncfusionComponent";
 import type { Route } from "./+types/all-users";
 
  
@@ -12,22 +12,14 @@ export const loader = async () => {
 }
 
 const Allusers = ({loaderData}: Route.ComponentProps) => {
-  const [GridComponent, setGridComponent] = useState<any>(null)
-  const [ColumnsDirective, setColumnsDirective] = useState<any>(null)
-  const [ColumnDirective, setColumnDirective] = useState<any>(null)
-
   const { users } = loaderData;
+  const components = useSyncfusionComponent(
+    () => import("@syncfusion/ej2-react-grids"),
+    ["GridComponent", "ColumnsDirective", "ColumnDirective"]
+  );
 
-
-  useEffect(() => {
-    import("@syncfusion/ej2-react-grids").then((pkg) => {
-      setGridComponent(() => pkg.GridComponent)
-      setColumnsDirective(() => pkg.ColumnsDirective)
-      setColumnDirective(() => pkg.ColumnDirective)
-    })
-  }, [])
-
-  if (!GridComponent || !ColumnsDirective) return null;
+  if (!components) return null;
+  const { GridComponent, ColumnsDirective, ColumnDirective } = components;
   return (
     <main className='all-users wrapper'>
       <Header

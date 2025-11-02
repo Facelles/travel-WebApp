@@ -1,6 +1,6 @@
 import { Outlet, redirect } from "react-router";
 import { MobileSideBar, NavItems } from "../../../components/index";
-import { useEffect, useState } from "react";
+import { useSyncfusionComponent } from "~/hooks/useSyncfusionComponent";
 import { account } from "~/appwrite/client";
 import { getExistingUser, storeUserData } from "~/appwrite/auth";
 
@@ -51,15 +51,13 @@ export async function clientLoader() {
     }
 }
 const AdminLayout = () => {
-  const [SidebarComponent, setSidebarComponent] = useState<any>(null);
+  const components = useSyncfusionComponent(
+    () => import("@syncfusion/ej2-react-navigations"),
+    ["SidebarComponent"]
+  );
 
-  useEffect(() => {
-    import("@syncfusion/ej2-react-navigations").then((pkg) => {
-      setSidebarComponent(() => pkg.SidebarComponent);
-    });
-  }, []);
-
-  if (!SidebarComponent) return null;
+  if (!components) return null;
+  const { SidebarComponent } = components;
 
   return (
     <div className="admin-layout">

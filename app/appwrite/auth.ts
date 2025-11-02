@@ -2,13 +2,28 @@ import { ID, OAuthProvider, Query } from "appwrite";
 import { account, database, appwriteConfig } from "~/appwrite/client";
 import { redirect } from "react-router";
 
+/**
+ * Helper function to query user documents by accountID
+ */
+const queryUserByAccountId = async (
+  accountId: string, 
+  selectFields?: string[]
+) => {
+  const queries = [Query.equal("accountID", accountId)];
+  if (selectFields && selectFields.length > 0) {
+    queries.push(Query.select(selectFields));
+  }
+  
+  return await database.listDocuments(
+    appwriteConfig.databaseID!,
+    appwriteConfig.userCollectionID!,
+    queries
+  );
+};
+
 export const getExistingUser = async (id: string) => {
   try {
-    const { documents, total } = await database.listDocuments(
-      appwriteConfig.databaseID!,
-      appwriteConfig.userCollectionID!,
-      [Query.equal("accountID", id)]
-    );
+    const { documents, total } = await queryUserByAccountId(id);
     return total > 0 ? documents[0] : null;
   } catch (error) {
     console.error("Error fetching user:", error);
@@ -86,13 +101,9 @@ export const getUser = async () => {
     const user = await account.get();
     if (!user) return redirect("/sign-in");
 
-    const { documents } = await database.listDocuments(
-      appwriteConfig.databaseID!,
-      appwriteConfig.userCollectionID!,
-      [
-        Query.equal("accountID", user.$id),
-        Query.select(["name", "email", "imageUrl", "joinedAt", "accountID"]),
-      ]
+    const { documents } = await queryUserByAccountId(
+      user.$id,
+      ["name", "email", "imageUrl", "joinedAt", "accountID"]
     );
 
     return documents.length > 0 ? documents[0] : redirect("/sign-in");

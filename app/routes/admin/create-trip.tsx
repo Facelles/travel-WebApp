@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
 import { Header } from '../../../components'
+import { useSyncfusionComponent } from "~/hooks/useSyncfusionComponent";
 import type { Route } from './+types/create-trip';
 
 
@@ -18,8 +18,6 @@ export const loader = async () => {
 }
 
 const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
-  const [ComboBoxComponent, setComboBoxComponent] = useState<any>(null);
-
   const handleSubmit = async () => { };
   const handleChange = (key: keyof TripFormData, value: string | number) => { }
 
@@ -30,13 +28,13 @@ const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
     value: country.value,
   }));
 
-  useEffect(() => {
-    import("@syncfusion/ej2-react-dropdowns").then((pkg) => {
-      setComboBoxComponent(() => pkg.ComboBoxComponent)
-    })
-  }, []);
+  const components = useSyncfusionComponent(
+    () => import("@syncfusion/ej2-react-dropdowns"),
+    ["ComboBoxComponent"]
+  );
 
-  if (!ComboBoxComponent) return null
+  if (!components) return null;
+  const { ComboBoxComponent } = components;
 
   return (
     <main className='flex flex-col gap-10 pb-20 wrapper'>

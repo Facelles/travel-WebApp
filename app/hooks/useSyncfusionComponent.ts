@@ -21,14 +21,26 @@ export function useSyncfusionComponent<T extends Record<string, any>>(
   const [components, setComponents] = useState<Record<string, any> | null>(null);
 
   useEffect(() => {
-    importFn().then((pkg) => {
-      const loadedComponents: Record<string, any> = {};
-      componentNames.forEach((name) => {
-        loadedComponents[name as string] = pkg[name];
+    let isMounted = true;
+    
+    importFn()
+      .then((pkg) => {
+        if (isMounted) {
+          const loadedComponents: Record<string, any> = {};
+          componentNames.forEach((name) => {
+            loadedComponents[name as string] = pkg[name];
+          });
+          setComponents(loadedComponents);
+        }
+      })
+      .catch((error) => {
+        console.error("Failed to load Syncfusion component:", error);
       });
-      setComponents(loadedComponents);
-    });
-  }, []);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [importFn, componentNames]);
 
   return components;
 }

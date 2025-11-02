@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 /**
  * Custom hook to dynamically import Syncfusion components
@@ -19,6 +19,7 @@ export function useSyncfusionComponent<T extends Record<string, any>>(
   componentNames: (keyof T)[]
 ): Record<string, any> | null {
   const [components, setComponents] = useState<Record<string, any> | null>(null);
+  const componentNamesRef = useRef(componentNames);
 
   useEffect(() => {
     let isMounted = true;
@@ -27,7 +28,7 @@ export function useSyncfusionComponent<T extends Record<string, any>>(
       .then((pkg) => {
         if (isMounted) {
           const loadedComponents: Record<string, any> = {};
-          componentNames.forEach((name) => {
+          componentNamesRef.current.forEach((name) => {
             loadedComponents[name as string] = pkg[name];
           });
           setComponents(loadedComponents);
@@ -40,7 +41,8 @@ export function useSyncfusionComponent<T extends Record<string, any>>(
     return () => {
       isMounted = false;
     };
-  }, [importFn, componentNames]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return components;
 }

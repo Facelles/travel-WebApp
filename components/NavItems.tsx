@@ -1,10 +1,10 @@
 import { Link, NavLink, useLoaderData, useNavigate } from "react-router";
 import { sidebarItems } from "~/constants";
 import { cn } from "~/lib/utils";
-import { registerLicense } from "@syncfusion/ej2-base";
+import { initializeSyncfusionLicense } from "~/lib/syncfusion";
 import { logoutUser } from "~/appwrite/auth";
 
-registerLicense(import.meta.env.VITE_SYNCFUSION_LICENSE_KEY);
+initializeSyncfusionLicense();
 
 const NavItems = ({ handleClick }: { handleClick?: () => void }) => {
     const user = useLoaderData();

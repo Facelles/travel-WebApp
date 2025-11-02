@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router";
 import { getFirstWord, cn } from "~/lib/utils";
+import { useSyncfusionComponent } from "~/hooks/useSyncfusionComponent";
 
 const TripCard = ({
   id,
@@ -10,20 +10,14 @@ const TripCard = ({
   tags,
   price,
 }: TripCardProps) => {
-  const [ChipListComponent, setChipListComponent] = useState<any>(null);
-  const [ChipsDirective, setChipsDirective] = useState<any>(null);
-  const [ChipDirective, setChipDirective] = useState<any>(null);
   const path = useLocation();
+  const components = useSyncfusionComponent(
+    () => import("@syncfusion/ej2-react-buttons"),
+    ["ChipListComponent", "ChipsDirective", "ChipDirective"]
+  );
 
-  useEffect(() => {
-    import("@syncfusion/ej2-react-buttons").then((pkg) => {
-      setChipListComponent(() => pkg.ChipListComponent);
-      setChipsDirective(() => pkg.ChipsDirective);
-      setChipDirective(() => pkg.ChipDirective);
-    });
-  }, []);
-
-  if (!ChipListComponent || !ChipsDirective || !ChipDirective) return null;
+  if (!components) return null;
+  const { ChipListComponent, ChipsDirective, ChipDirective } = components;
 
   return (
     <Link

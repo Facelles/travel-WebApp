@@ -1,26 +1,24 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef } from "react";
 import { Link } from "react-router";
 import NavItems from "./NavItems";
+import { useSyncfusionComponent } from "~/hooks/useSyncfusionComponent";
+import { initializeSyncfusionLicense } from "~/lib/syncfusion";
 
-import { registerLicense } from "@syncfusion/ej2-base";
-
-registerLicense(import.meta.env.VITE_SYNCFUSION_LICENSE_KEY);
+initializeSyncfusionLicense();
 
 const MobileSideBar = () => {
-  const [SidebarComponent, setSidebarComponent] = useState<any>(null);
   const sideBarRef = useRef<any>(null);
+  const components = useSyncfusionComponent(
+    () => import("@syncfusion/ej2-react-navigations"),
+    ["SidebarComponent"]
+  );
 
   const toggleSidebar = () => {
     sideBarRef.current?.toggle();
   };
 
-  useEffect(() => {
-    import("@syncfusion/ej2-react-navigations").then((pkg) => {
-      setSidebarComponent(() => pkg.SidebarComponent);
-    });
-  }, []);
-
-  if (!SidebarComponent) return null;
+  if (!components) return null;
+  const { SidebarComponent } = components;
 
   return (
     <div className="mobile-sidebar">

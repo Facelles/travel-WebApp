@@ -5,8 +5,8 @@ import type { Route } from './+types/create-trip';
 import { comboBoxItems, selectItems } from '~/constants';
 import { cn, formatKey } from '~/lib/utils';
 import { world_map } from '~/constants/world_map';
-import type { classNames } from '@syncfusion/ej2-react-buttons';
 import { account } from '~/appwrite/client';
+import { useNavigate } from 'react-router';
 
 
 export const loader = async () => {
@@ -18,11 +18,12 @@ export const loader = async () => {
     flagUrl: country.flags.svg,
     coordinates: country.latlng,
     value: country.name.common,
-    openStreetMap: country.maps?.openStreetMaps, // <-- виправлено назву ключа
+    openStreetMap: country.maps?.openStreetMap,
   }));
 }
 
 const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
+  const navigate = useNavigate();
   const countries = loaderData as Country[];
 
   const [formData, setFormData] = useState<TripFormData>({
@@ -41,12 +42,12 @@ const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
     setLoading(true);
 
 
-    if(!formData.country || !formData.duration || !formData.travelStyle || !formData.budget || !formData.interest || !formData.groupType) {
+    if (!formData.country || !formData.duration || !formData.travelStyle || !formData.budget || !formData.interest || !formData.groupType) {
       setError('Please fill in all fields.');
       setLoading(false);
       return;
     }
-    if(formData.duration <= 0 || formData.duration > 10) {
+    if (formData.duration <= 0 || formData.duration > 10) {
       setError('Duration must be between 1 and 10 days.');
       setLoading(false);
       return;
@@ -59,8 +60,24 @@ const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
     }
 
     try {
-      console.log('user:', user);
-      console.log('form data:', formData);
+      const response = await fetch('/api/create-trip', {
+        method: 'POST',
+        headers: { 'Content-Type': 'aaplication/json' },
+        body: JSON.stringify({
+          countr:           formData.country,
+          duration:        formData.duration,
+          travelStyles: formData.travelStyle,
+          interests:       formData.interest,
+          budget:            formData.budget,
+          groupType:      formData.groupType,
+          userId:                   user.$id,
+        }),
+      });
+
+      const result: CreateTripResponse = await response.json();
+      if(result.id) navigate(`/trips/${result.id}`);
+      else console.error('Failde to generate trip')
+
     }
     catch (err) {
       setError('An error occurred while creating the trip. Please try again.');
@@ -211,7 +228,7 @@ const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
             </MapsComponent>
           </div>
 
-          <div className='bg-gray-200 h-px w-full '/>
+          <div className='bg-gray-200 h-px w-full ' />
           {error && (
             <div className='error'>
               <p>
@@ -221,7 +238,7 @@ const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
           )}
           <footer className='px-6 w-full'>
             <ButtonComponent type='submit' className='button-class !h-12 !w-full' disabled={loading}>
-              <img src={`/assets/icons/${loading ? 'loader.svg' : 'magic-star.svg'}`} className={cn('size-5',  { 'animate-spin': loading })} />
+              <img src={`/assets/icons/${loading ? 'loader.svg' : 'magic-star.svg'}`} className={cn('size-5', { 'animate-spin': loading })} />
               <span className='p-18-semibold text-white'>
                 {loading ? 'Creating Trip...' : 'Create Trip Plan'}
               </span>

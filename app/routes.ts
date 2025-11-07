@@ -8,8 +8,10 @@ const routes: RouteConfig = [
     route("trips/create","./routes/admin/create-trip.tsx"),
   ]),
   route("sign-in", "./routes/root/sign-in.tsx"),
+  route('/api/create-trip', './routes/api/create-trip.ts'),
   route("/", "./routes/main.tsx", {
   }),
 ];
 
 export default routes;
+ 

@@ -14,6 +14,7 @@ import { useState, useEffect, useRef } from "react";
  * if (!components) return null;
  * const { ButtonComponent } = components;
  */
+
 export function useSyncfusionComponent<T extends Record<string, any>>(
   importFn: () => Promise<T>,
   componentNames: (keyof T)[]

@@ -76,7 +76,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
             `https://api.unsplash.com/search/photos?query=${country} ${interests} ${travelStyle}&client_id=${unsplashAPIKey}`
         );
 
-        const imageJson = await imageResponse.json();
+        const imageJson = await imageResponse.json();  
 
         const imageUrls = (imageJson?.results ?? [])
             .slice(0, 3)

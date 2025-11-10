@@ -62,15 +62,15 @@ const CreateTrip = ({ loaderData }: Route.ComponentProps) => {
     try {
       const response = await fetch('/api/create-trip', {
         method: 'POST',
-        headers: { 'Content-Type': 'aaplication/json' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          countr:           formData.country,
-          duration:        formData.duration,
-          travelStyles: formData.travelStyle,
-          interests:       formData.interest,
-          budget:            formData.budget,
-          groupType:      formData.groupType,
-          userId:                   user.$id,
+          country: formData.country,
+          duration: formData.duration,
+          travelStyle: formData.travelStyle,
+          interests: formData.interest,
+          budget: formData.budget,
+          groupType: formData.groupType,
+          userId: user.$id,
         }),
       });
 

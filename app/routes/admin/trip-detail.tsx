@@ -253,7 +253,6 @@ const tripDetail = ({ loaderData }: Route.ComponentProps) => {
                                 ? trip.imageUrls.find((url: string) => !!url)
                                 : null;
                             
-                            // safely get tags without "undefined" strings
                             const tags = [trip.interests, trip.travelStyle].filter(
                                 (tag) => tag && tag !== "undefined" && tag !== "null"
                             );

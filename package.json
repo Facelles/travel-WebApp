@@ -17,6 +17,7 @@
     "@sentry/react-router": "^10.22.0",
     "@syncfusion/ej2-base": "^31.1.20",
     "@syncfusion/ej2-react-buttons": "^31.1.17",
+    "@syncfusion/ej2-react-charts": "^31.2.10",
     "@syncfusion/ej2-react-dropdowns": "^31.1.20",
     "@syncfusion/ej2-react-grids": "^31.1.20",
     "@syncfusion/ej2-react-maps": "^31.2.2",

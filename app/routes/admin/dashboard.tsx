@@ -9,7 +9,8 @@ import {
 import { getAllTrips } from "~/appwrite/trips";
 import { parseTripData } from "~/lib/utils";
 import { useSyncfusionComponent } from "~/hooks/useSyncfusionComponent";
-
+import { tripXAxis, tripyAxis, userXAxis, useryAxis } from "~/constants";
+import Allusers from "./all-users";
 
 export const clientLoader = async () => {
   const [
@@ -44,8 +45,8 @@ export const clientLoader = async () => {
     user,
     dashboardStats,
     allTrips,
-    userGrowth,
-    tripsByTravelStyle,
+    userGrowth: userGrowth || [],
+    tripsByTravelStyle: tripsByTravelStyle || [],
     allUsers: mappedUsers
   };
 };
@@ -53,17 +54,35 @@ export const clientLoader = async () => {
 const Dashboard = ({ loaderData }: Route.ComponentProps) => {
   const components = useSyncfusionComponent(
     () => import('@syncfusion/ej2-react-charts'),
-    ["ChartComponent"]
-  )
+    ["ChartComponent", "SeriesCollectionDirective",
+      "SeriesDirective",
+      "LineSeries",
+      "Category",
+      "Tooltip",
+      "DataLabel",
+      "SplineAreaSeries",
+      "ColumnSeries"
+    ]
+  );
+  const injecting = useSyncfusionComponent(
+    () => import("@syncfusion/ej2-react-navigations"),
+    ["Inject"]
+  );
+
+
   const user = loaderData.user as User | null;
-  const { dashboardStats, allTrips, userGrowth, tripsByTravelStyle, allUsers } = loaderData;
-  if (!components) return null;
-  const { ChartComponent } = components
+  const { dashboardStats, allTrips, userGrowth, tripsByTravelStyle } = loaderData;
+
+  if (!components || !injecting) return null;
+
+  const { ChartComponent, Category, Tooltip, SeriesDirective, SeriesCollectionDirective, DataLabel, ColumnSeries, SplineAreaSeries } = components;
+  const { Inject } = injecting;
+
   return (
     <main className="dashboard wrapper">
       <Header
         title={`Welcome back, ${user?.name || "User"} 👋`}
-        descprition="Trakck your activity, trends and popular destinations"
+        descprition="Track your activity, trends and popular destinations"
       />
 
       <section className="flex flex-col gap-6">
@@ -88,30 +107,86 @@ const Dashboard = ({ loaderData }: Route.ComponentProps) => {
           />
         </div>
       </section>
+
       <section className="container">
-        <h1 className="text-xl font-semibold text-dark-100"> Created Trips</h1>
+        <h1 className="text-xl font-semibold text-dark-100">Created Trips</h1>
 
         <div className="trip-grid">
-          {allTrips
-            .map((trip) => (
-              <TripCard
-                key={trip.id}
-                id={trip.id.toString()}
-                name={trip.name!}
-                imageUrl={trip.imageUrls[0]}
-                location={trip.itinerary?.[0]?.location || "Unknown"}
-                tags={[trip.interests!, trip.travelStyle!]}
-                price={trip.estimatedPrice!}
-              />
-            ))}
+          {allTrips.map((trip) => (
+            <TripCard
+              key={trip.id}
+              id={trip.id.toString()}
+              name={trip.name!}
+              imageUrl={trip.imageUrls[0]}
+              location={trip.itinerary?.[0]?.location || "Unknown"}
+              tags={[trip.interests!, trip.travelStyle!]}
+              price={trip.estimatedPrice!}
+            />
+          ))}
         </div>
       </section>
 
-      <section className=" grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <ChartComponent>
-          
-        </ChartComponent>
+      <section className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        {userGrowth && userGrowth.length > 0 && (
+          <ChartComponent
+            id="chart-1"
+            primaryXAxis={userXAxis}
+            primaryYAxis={useryAxis}
+            title="User Growth"
+            tooltip={{ enable: true }}
+          >
+            <Inject services={[ColumnSeries, SplineAreaSeries, Category, DataLabel, Tooltip]} />
+            <SeriesCollectionDirective>
+              <SeriesDirective
+                dataSource={userGrowth}
+                xName='day'
+                yName='count'
+                type='Column'
+                name='Column'
+                columnWidth={0.3}
+                cornerRadius={{ topLeft: 10, topRight: 10 }}
+              />
+              <SeriesDirective
+                dataSource={userGrowth}
+                xName='day'
+                yName='count'
+                type='SplineArea'
+                name='Wave'
+                fill="rgba(71,132,328,0.3)"
+                border={{ width: 2, color: '#4784EE' }}
+              />
+            </SeriesCollectionDirective>
+          </ChartComponent>
+        )}
+
+        {tripsByTravelStyle && tripsByTravelStyle.length > 0 && (
+          <ChartComponent
+            id="chart-2"
+            primaryXAxis={tripXAxis}
+            primaryYAxis={tripyAxis}
+            title="Trip Trends"
+            tooltip={{ enable: true }}
+          >
+            <Inject services={[ColumnSeries, Category, DataLabel, Tooltip]} />
+            <SeriesCollectionDirective>
+              <SeriesDirective
+                dataSource={tripsByTravelStyle}
+                xName='travelStyle'
+                yName='count'
+                type='Column'
+                name='Trips'
+                columnWidth={0.3}
+                cornerRadius={{ topLeft: 10, topRight: 10 }}
+              />
+            </SeriesCollectionDirective>
+          </ChartComponent>
+        )}
       </section>
+
+      <section className="user-trip wrapper">
+
+      </section>
+
     </main>
   );
 };

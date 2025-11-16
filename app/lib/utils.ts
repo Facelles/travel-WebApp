@@ -26,16 +26,26 @@ export function parseMarkdownToJson(markdownText: string): unknown | null {
   return null;
 }
 
-export function parseTripData(jsonString: string): Trip | null {
-  try {
-    const data: Trip = JSON.parse(jsonString);
-
-    return data;
-  } catch (error) {
-    console.error("Failed to parse trip data:", error);
+export const parseTripData = (data: any): Trip | null => {
+  if (!data || data === "undefined" || data === "null") {
     return null;
   }
-}
+
+  if (typeof data === "object") {
+    return data;
+  }
+
+  if (typeof data === "string") {
+    try {
+      return JSON.parse(data);
+    } catch (e) {
+      console.warn("Failed to parse trip data:", e);
+      return null;
+    }
+  }
+
+  return null;
+};
 
 export function getFirstWord(input: string = ""): string {
   return input.trim().split(/\s+/)[0] || "";
